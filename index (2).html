@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mo Altunji – BMW Specialist & Garage</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+  :root {
+    --purple: #6c00c8; --purple-dark: #4a0090; --purple-light: #9b3dff;
+    --purple-glow: #b06bff33; --white: #ffffff; --gray: #8a8a9a;
+    --dark: #0a0010; --card-bg: #12001f; --border: #2e1050;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Outfit', sans-serif; background: var(--dark); color: var(--white); overflow-x: hidden; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 5vw; background: rgba(10,0,16,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.08em; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: var(--purple-light); }
+  .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+  .nav-links a { color: #c5b5e0; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta { background: var(--purple); color: var(--white) !important; padding: 0.55rem 1.4rem; border-radius: 6px; font-weight: 600 !important; transition: background 0.2s !important; }
+  .nav-cta:hover { background: var(--purple-light) !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { display: block; width: 26px; height: 2px; background: var(--white); border-radius: 2px; }
+  .mobile-menu { display: none; flex-direction: column; background: rgba(10,0,16,0.98); position: fixed; top: 65px; left: 0; right: 0; z-index: 99; padding: 1rem 5vw 2rem; border-bottom: 1px solid var(--border); }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: #c5b5e0; text-decoration: none; font-size: 1.1rem; font-weight: 500; padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
+
+  #home { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 5vw 5rem; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 70% 60% at 80% 40%, #5c00aa44 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 10% 80%, #3a006633 0%, transparent 70%); }
+  .hero-grid { position: absolute; inset: 0; z-index: 0; opacity: 0.04; background-image: linear-gradient(var(--purple-light) 1px, transparent 1px), linear-gradient(90deg, var(--purple-light) 1px, transparent 1px); background-size: 60px 60px; }
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--purple-glow); border: 1px solid #6c00c860; color: var(--purple-light); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 100px; margin-bottom: 1.8rem; animation: fadeUp 0.7s ease both; }
+  .hero-badge::before { content: '●'; font-size: 0.5rem; }
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 9vw, 7rem); line-height: 0.95; letter-spacing: 0.02em; animation: fadeUp 0.7s 0.1s ease both; }
+  h1 .accent { color: var(--purple-light); }
+  .hero-sub { margin-top: 1.5rem; max-width: 520px; color: #c0aad8; font-size: 1.1rem; line-height: 1.7; font-weight: 300; animation: fadeUp 0.7s 0.2s ease both; }
+  .hero-actions { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.7s 0.3s ease both; }
+  .btn-primary { background: var(--purple); color: var(--white); padding: 0.85rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; text-decoration: none; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 0 24px #6c00c850; font-family: 'Outfit', sans-serif; }
+  .btn-primary:hover:not(:disabled) { background: var(--purple-light); transform: translateY(-2px); box-shadow: 0 4px 32px #6c00c880; }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-secondary { background: transparent; color: var(--white); padding: 0.85rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; text-decoration: none; border: 1.5px solid var(--border); cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+  .btn-secondary:hover { border-color: var(--purple-light); background: var(--purple-glow); }
+  .hero-stats { margin-top: 4rem; display: flex; gap: 3rem; flex-wrap: wrap; animation: fadeUp 0.7s 0.4s ease both; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: var(--purple-light); line-height: 1; }
+  .stat-label { color: var(--gray); font-size: 0.85rem; margin-top: 0.2rem; }
+
+  section { padding: 6rem 5vw; }
+  .section-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--purple-light); margin-bottom: 0.8rem; }
+  h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1; letter-spacing: 0.02em; }
+  .section-divider { width: 48px; height: 3px; background: var(--purple); border-radius: 2px; margin: 1.2rem 0 2rem; }
+
+  #about { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; background: linear-gradient(135deg, #0e001a 0%, #080010 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .about-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; position: relative; overflow: hidden; }
+  .about-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, var(--purple) 0%, transparent 70%); opacity: 0.15; border-radius: 50%; }
+  .about-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .about-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .about-card p { color: var(--gray); font-size: 0.95rem; line-height: 1.6; }
+  .about-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .about-text p { color: #c0aad8; line-height: 1.8; font-size: 1.05rem; margin-bottom: 1.2rem; font-weight: 300; }
+  .brand-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+  .brand-tag { border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 1rem; font-size: 0.85rem; color: #c0aad8; font-weight: 500; }
+  .brand-tag.featured { background: var(--purple-glow); border-color: var(--purple); color: var(--purple-light); font-weight: 600; }
+
+  #services { background: var(--dark); }
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+  .service-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s; position: relative; overflow: hidden; }
+  .service-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--purple), var(--purple-light)); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; }
+  .service-card:hover { border-color: var(--purple); transform: translateY(-4px); box-shadow: 0 8px 40px #6c00c825; }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-icon { font-size: 2.2rem; margin-bottom: 1.2rem; }
+  .service-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .service-card p { color: var(--gray); font-size: 0.9rem; line-height: 1.6; }
+  .service-badge { display: inline-block; background: var(--purple-glow); color: var(--purple-light); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.2rem 0.65rem; border-radius: 4px; margin-bottom: 0.8rem; border: 1px solid #6c00c840; }
+
+  /* ADMIN */
+  #adminBtn { position: fixed; bottom: 12px; right: 12px; z-index: 200; background: #1a0a2a; color: #3a2a50; border: 1px solid #2a1040; border-radius: 50%; width: 18px; height: 18px; font-size: 0px; cursor: pointer; opacity: 0.4; transition: opacity 0.2s; font-family: 'Outfit', sans-serif; padding: 0; }
+  #adminBtn:hover { opacity: 1; }
+  .admin-overlay { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
+  .admin-overlay.open { display: flex; }
+  .admin-modal { background: #0e001a; border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; width: 90%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
+  .admin-modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; margin-bottom: 0.3rem; }
+  .admin-modal > p { color: var(--gray); font-size: 0.9rem; margin-bottom: 1.8rem; }
+  .admin-close { float: right; background: none; border: none; color: var(--gray); font-size: 1.5rem; cursor: pointer; margin-top: -0.5rem; }
+  .week-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+  .week-nav button { background: var(--card-bg); border: 1px solid var(--border); color: var(--white); border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.9rem; transition: border-color 0.2s; }
+  .week-nav button:hover { border-color: var(--purple); }
+  .week-label { font-weight: 600; font-size: 0.95rem; color: var(--purple-light); }
+  .day-rows { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+  .day-row { display: flex; align-items: center; gap: 1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.2rem; }
+  .day-row .day-name { width: 100px; font-weight: 600; font-size: 0.95rem; }
+  .day-toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+  .day-toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; inset: 0; background: #2e1050; border-radius: 24px; cursor: pointer; transition: background 0.2s; }
+  .toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: var(--white); border-radius: 50%; transition: transform 0.2s; }
+  .day-toggle input:checked + .toggle-slider { background: var(--purple); }
+  .day-toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+  .day-status { font-size: 0.85rem; color: var(--gray); }
+  .day-status.open-status { color: #5ddd90; }
+  .admin-save { width: 100%; padding: 0.85rem; background: var(--purple); color: var(--white); border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif; transition: background 0.2s; }
+  .admin-save:hover { background: var(--purple-light); }
+  .admin-saved { text-align: center; color: #5ddd90; font-size: 0.9rem; margin-top: 0.8rem; display: none; }
+
+  /* BOOKING */
+  #afspraak { background: linear-gradient(135deg, #0e001a 0%, #080010 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .booking-container { display: grid; grid-template-columns: 1fr 1.3fr; gap: 4rem; align-items: start; margin-top: 3rem; }
+  .booking-info h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .booking-info p { color: var(--gray); font-size: 0.9rem; line-height: 1.6; margin-bottom: 2rem; }
+  .hours-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  .hours-table td { padding: 0.6rem 0; font-size: 0.9rem; }
+  .hours-table td:first-child { color: var(--gray); }
+  .hours-table td:last-child { color: var(--white); font-weight: 500; text-align: right; }
+  .hours-row-open td { color: var(--purple-light) !important; }
+  .booking-form { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.05em; color: #c0aad8; text-transform: uppercase; }
+  input, select, textarea { background: #1a0030; border: 1.5px solid var(--border); color: var(--white); border-radius: 8px; padding: 0.75rem 1rem; font-family: 'Outfit', sans-serif; font-size: 0.95rem; transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%; }
+  input:focus, select:focus, textarea:focus { border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-glow); }
+  input::placeholder, textarea::placeholder { color: #5a4a70; }
+  select option { background: #1a0030; }
+  textarea { resize: vertical; min-height: 100px; }
+
+  .date-display { background: #1a0030; border: 1.5px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.95rem; color: #5a4a70; cursor: pointer; transition: border-color 0.2s; user-select: none; }
+  .date-display.has-value { color: var(--white); border-color: var(--purple); }
+  .date-display:hover { border-color: var(--purple); }
+
+  .calendar-popup { display: none; background: #1a0030; border: 1.5px solid var(--border); border-radius: 12px; padding: 1.2rem; margin-top: 0.5rem; }
+  .calendar-popup.open { display: block; }
+  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .cal-header button { background: none; border: 1px solid var(--border); color: var(--white); border-radius: 6px; width: 32px; height: 32px; cursor: pointer; font-size: 1.1rem; transition: border-color 0.2s; }
+  .cal-header button:hover { border-color: var(--purple); }
+  .cal-month-label { font-weight: 700; font-size: 1rem; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-day-header { text-align: center; font-size: 0.7rem; color: var(--gray); font-weight: 600; padding: 0.3rem; text-transform: uppercase; }
+  .cal-day { text-align: center; padding: 0.48rem; border-radius: 6px; font-size: 0.88rem; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .cal-day.open-day { color: var(--white); font-weight: 500; }
+  .cal-day.open-day:hover { background: var(--purple-glow); }
+  .cal-day.closed-day { color: #3a2a50 !important; cursor: not-allowed; }
+  .cal-day.past { color: #2a1a40 !important; cursor: not-allowed; }
+  .cal-day.empty { cursor: default; }
+  .cal-day.selected { background: var(--purple) !important; color: var(--white) !important; font-weight: 700; }
+  .cal-day.today-marker { outline: 1px solid var(--purple); outline-offset: -1px; border-radius: 6px; }
+  .cal-legend { display: flex; gap: 1.2rem; margin-top: 0.8rem; font-size: 0.78rem; color: var(--gray); }
+
+  .timeslots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-top: 0.4rem; }
+  .timeslot { background: #1a0030; border: 1.5px solid var(--border); border-radius: 7px; padding: 0.55rem; text-align: center; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; color: #c0aad8; user-select: none; }
+  .timeslot:hover { border-color: var(--purple); color: var(--white); }
+  .timeslot.selected { background: var(--purple); border-color: var(--purple-light); color: var(--white); box-shadow: 0 0 16px #6c00c840; }
+  .no-date-msg { color: var(--gray); font-size: 0.85rem; font-style: italic; padding: 0.3rem 0; }
+
+  .form-submit { margin-top: 1.5rem; }
+  .form-submit .btn-primary { width: 100%; text-align: center; display: block; }
+  .success-msg { display: none; background: #0d2010; border: 1px solid #2a6040; color: #5ddd90; border-radius: 10px; padding: 1.2rem 1.5rem; text-align: center; font-weight: 600; margin-top: 1rem; }
+  .error-msg { display: none; background: #200808; border: 1px solid #602020; color: #ff6b6b; border-radius: 10px; padding: 1rem 1.5rem; text-align: center; font-size: 0.9rem; margin-top: 0.8rem; }
+
+  #contact { background: var(--dark); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; margin-top: 3rem; align-items: start; }
+  .contact-items { display: flex; flex-direction: column; gap: 1.5rem; }
+  .contact-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+  .contact-item-icon { width: 48px; height: 48px; flex-shrink: 0; background: var(--purple-glow); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+  .contact-item h4 { font-weight: 600; font-size: 0.9rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .contact-item a, .contact-item p { color: var(--white); text-decoration: none; font-size: 1rem; font-weight: 500; }
+  .contact-item a:hover { color: var(--purple-light); }
+  .map-container { border-radius: 16px; overflow: hidden; border: 1px solid var(--border); aspect-ratio: 16/9; }
+  .map-container iframe { width: 100%; height: 100%; display: block; border: none; filter: grayscale(40%) brightness(0.8); }
+
+  footer { background: #06000e; border-top: 1px solid var(--border); padding: 2.5rem 5vw; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--white); letter-spacing: 0.08em; }
+  .footer-logo span { color: var(--purple-light); }
+  footer p { color: var(--gray); font-size: 0.85rem; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { color: var(--gray); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* PASSWORD MODAL */
+  .pw-overlay { display: none; position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); align-items: center; justify-content: center; }
+  .pw-overlay.open { display: flex; }
+  .pw-modal { background: #0e001a; border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; width: 90%; max-width: 360px; text-align: center; }
+  .pw-modal h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .pw-modal p { color: var(--gray); font-size: 0.88rem; margin-bottom: 1.5rem; }
+  .pw-input { background: #1a0030; border: 1.5px solid var(--border); color: var(--white); border-radius: 8px; padding: 0.8rem 1rem; font-family: 'Outfit', sans-serif; font-size: 1rem; outline: none; width: 100%; text-align: center; letter-spacing: 0.1em; transition: border-color 0.2s; }
+  .pw-input:focus { border-color: var(--purple); }
+  .pw-btn { margin-top: 1rem; width: 100%; padding: 0.85rem; background: var(--purple); color: var(--white); border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif; transition: background 0.2s; }
+  .pw-btn:hover { background: var(--purple-light); }
+  .pw-error { color: #ff6b6b; font-size: 0.85rem; margin-top: 0.8rem; display: none; }
+  .pw-cancel { color: var(--gray); font-size: 0.82rem; margin-top: 0.8rem; cursor: pointer; display: block; }
+  .pw-cancel:hover { color: var(--white); }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; } .hamburger { display: flex; }
+    #about { grid-template-columns: 1fr; gap: 2.5rem; }
+    .booking-container { grid-template-columns: 1fr; gap: 2rem; }
+    .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+  @media (max-width: 600px) {
+    .hero-stats { gap: 1.5rem; } .about-cards-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; } .timeslots { grid-template-columns: repeat(3,1fr); }
+    footer { flex-direction: column; text-align: center; } .footer-links { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#home" class="nav-logo">MO <span>AUTO</span></a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">Over Ons</a></li>
+    <li><a href="#services">Diensten</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#afspraak" class="nav-cta">Afspraak Maken</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home" onclick="closeMenu()">Home</a>
+  <a href="#about" onclick="closeMenu()">Over Ons</a>
+  <a href="#services" onclick="closeMenu()">Diensten</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="#afspraak" onclick="closeMenu()">Afspraak Maken</a>
+</div>
+
+<section id="home">
+  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">BMW Specialist & Garage</div>
+    <h1>UW AUTO IN<br><span class="accent">VAKKUNDIGE</span><br>HANDEN</h1>
+    <p class="hero-sub">Mo Altunji — meer dan 10 jaar expertise in BMW en alle andere automerken. Kwaliteit, betrouwbaarheid en vakmanschap, elke keer opnieuw.</p>
+    <div class="hero-actions">
+      <a href="#afspraak" class="btn-primary">📅 Maak een Afspraak</a>
+      <a href="#services" class="btn-secondary">Onze Diensten</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">10+</div><div class="stat-label">Jaar Ervaring</div></div>
+      <div><div class="stat-num">BMW</div><div class="stat-label">Specialist</div></div>
+      <div><div class="stat-num">100%</div><div class="stat-label">Kwaliteitsgarantie</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="about-text">
+    <div class="section-label">Over Ons</div>
+    <h2>HET VERHAAL VAN<br>MO ALTUNJI</h2>
+    <div class="section-divider"></div>
+    <p>Met meer dan <strong>10 jaar ervaring</strong> in de automobielsector heeft Mo Altunji een reputatie opgebouwd die staat voor kwaliteit en vakmanschap.</p>
+    <p>Mo is gespecialiseerd in <strong>BMW</strong> — van diagnose tot complexe herstellingen — maar werkt ook professioneel aan alle andere automerken. Elke klant krijgt persoonlijke aandacht en eerlijk advies.</p>
+    <div class="brand-tags">
+      <span class="brand-tag featured">⭐ BMW Specialist</span>
+      <span class="brand-tag">Mercedes</span><span class="brand-tag">Audi</span>
+      <span class="brand-tag">Volkswagen</span><span class="brand-tag">Renault</span>
+      <span class="brand-tag">Alle merken</span>
+    </div>
+  </div>
+  <div>
+    <div class="about-cards-grid">
+      <div class="about-card"><div class="about-icon">🏆</div><h3>10+ Jaar Ervaring</h3><p>Bewezen expertise in diagnose en herstelling van alle voertuigtypes.</p></div>
+      <div class="about-card"><div class="about-icon">🔍</div><h3>Diagnose</h3><p>Moderne apparatuur voor nauwkeurige probleemdiagnose.</p></div>
+      <div class="about-card"><div class="about-icon">⚡</div><h3>Elektrische Systemen</h3><p>Specialist in complexe elektrische problemen.</p></div>
+      <div class="about-card"><div class="about-icon">🤝</div><h3>Eerlijk Advies</h3><p>Transparante communicatie en eerlijke prijzen, altijd.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div style="text-align:center;max-width:600px;margin:0 auto">
+    <div class="section-label">Onze Diensten</div>
+    <h2>WAT WIJ VOOR U DOEN</h2>
+    <div class="section-divider" style="margin:1.2rem auto 2rem"></div>
+    <p style="color:var(--gray);font-size:1rem;line-height:1.7">Van snelle diagnose tot grondige herstelling — wij zorgen dat uw wagen optimaal rijdt.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card"><div class="service-badge">⭐ Specialiteit</div><div class="service-icon">🔵</div><h3>BMW Diagnose & Herstelling</h3><p>Gespecialiseerde kennis van BMW-systemen. Foutcodes uitlezen, motor, transmissie, ophanging — volledig beheerd.</p></div>
+    <div class="service-card"><div class="service-icon">🔧</div><h3>Periodiek Onderhoud</h3><p>Olieverversing, remmen, filters, banden, koppeling — alles voor een veilig en economisch rijdende wagen.</p></div>
+    <div class="service-card"><div class="service-icon">⚡</div><h3>Elektrische Problemen</h3><p>Diagnose en herstelling van elektrische storingen, boordcomputer, verlichting, sensoren en meer.</p></div>
+    <div class="service-card"><div class="service-icon">⚙️</div><h3>Algemene Mechaniek</h3><p>Revisie van motor, tandriemen, uitlaat, schokbrekers — voor alle merken en modellen.</p></div>
+    <div class="service-card"><div class="service-icon">🛞</div><h3>Remmen & Veiligheid</h3><p>Controle en vervanging van remblokken, remschijven en ABS-systemen voor maximale rijveiligheid.</p></div>
+    <div class="service-card"><div class="service-icon">💻</div><h3>Computerdiagnose</h3><p>Professionele foutcode-uitlezing met de nieuwste diagnostische apparatuur voor elk automerk.</p></div>
+  </div>
+</section>
+
+<section id="afspraak">
+  <div style="text-align:center;max-width:600px;margin:0 auto">
+    <div class="section-label">Online Boeken</div>
+    <h2>AFSPRAAK MAKEN</h2>
+    <div class="section-divider" style="margin:1.2rem auto 2rem"></div>
+    <p style="color:var(--gray);font-size:1rem;line-height:1.7">Kies een beschikbare dag en tijdslot. Wij bevestigen uw afspraak via e-mail.</p>
+  </div>
+  <div class="booking-container">
+    <div class="booking-info">
+      <h3>Beschikbaarheid deze maand</h3>
+      <p>Paarse dagen zijn beschikbaar. Klik op een dag in de kalender om een afspraak te maken.</p>
+      <table class="hours-table" id="hoursTable"></table>
+      <br><br>
+      <h3>Contactgegevens</h3>
+      <p style="margin-bottom:0.3rem">📍 Kapellestraat 1</p>
+      <p style="margin-bottom:0.3rem">📞 <a href="tel:+32483719443" style="color:var(--purple-light)">+32 483 71 94 43</a></p>
+      <p>✉️ <a href="mailto:mo.altunji@gmail.com" style="color:var(--purple-light)">mo.altunji@gmail.com</a></p>
+    </div>
+    <div class="booking-form">
+      <div class="form-grid">
+        <div class="form-group"><label>Voornaam *</label><input type="text" id="fname" placeholder="Jan"></div>
+        <div class="form-group"><label>Achternaam *</label><input type="text" id="lname" placeholder="Jansen"></div>
+        <div class="form-group"><label>E-mail *</label><input type="email" id="email" placeholder="jan@email.com"></div>
+        <div class="form-group"><label>Telefoon *</label><input type="tel" id="phone" placeholder="+32 4xx xx xx xx"></div>
+        <div class="form-group"><label>Merk & Model *</label><input type="text" id="car" placeholder="BMW 3 Reeks 2019"></div>
+        <div class="form-group">
+          <label>Dienst *</label>
+          <select id="service">
+            <option value="">Kies een dienst...</option>
+            <option>BMW Diagnose & Herstelling</option>
+            <option>Periodiek Onderhoud</option>
+            <option>Elektrische Problemen</option>
+            <option>Remmen & Veiligheid</option>
+            <option>Algemene Mechaniek</option>
+            <option>Computerdiagnose</option>
+            <option>Andere</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Datum * <span style="color:var(--gray);font-weight:400;text-transform:none;letter-spacing:0;font-size:0.78rem">(enkel beschikbare dagen)</span></label>
+          <div class="date-display" id="dateDisplay" onclick="toggleCal()">📅 Klik om een datum te kiezen</div>
+          <div class="calendar-popup" id="calPopup">
+            <div class="cal-header">
+              <button onclick="prevMonth(event)">‹</button>
+              <span class="cal-month-label" id="calMonthLabel"></span>
+              <button onclick="nextMonth(event)">›</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+            <div class="cal-legend"><span>🟣 Beschikbaar</span><span>⬛ Gesloten / Verleden</span></div>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Tijdslot *</label>
+          <div id="slotArea"><p class="no-date-msg">Kies eerst een datum hierboven.</p></div>
+        </div>
+        <div class="form-group full"><label>Beschrijving (optioneel)</label><textarea id="desc" placeholder="Beschrijf kort het probleem of de gewenste dienst..."></textarea></div>
+      </div>
+      <div class="form-submit">
+        <button class="btn-primary" id="submitBtn" onclick="submitBooking()">📨 Afspraak Aanvragen</button>
+      </div>
+      <div class="success-msg" id="successMsg">✅ Uw afspraak is aangevraagd! Mo neemt binnenkort contact met u op ter bevestiging via e-mail of telefoon.</div>
+      <div class="error-msg" id="errorMsg">❌ Verzenden mislukt. Bel ons direct op <a href="tel:+32483719443" style="color:var(--purple-light)">+32 483 71 94 43</a> of stel EmailJS in (zie instructies onderaan de code).</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div><div class="section-label">Contact</div><h2>NEEM CONTACT OP</h2><div class="section-divider"></div></div>
+  <div class="contact-grid">
+    <div class="contact-items">
+      <div class="contact-item"><div class="contact-item-icon">📍</div><div><h4>Adres</h4><p>Kapellestraat 1</p></div></div>
+      <div class="contact-item"><div class="contact-item-icon">📞</div><div><h4>Telefoon</h4><a href="tel:+32483719443">+32 483 71 94 43</a></div></div>
+      <div class="contact-item"><div class="contact-item-icon">✉️</div><div><h4>E-mail</h4><a href="mailto:mo.altunji@gmail.com">mo.altunji@gmail.com</a></div></div>
+      <div class="contact-item"><div class="contact-item-icon">🕐</div><div><h4>Openingsuren</h4><p id="contactHoursText">Maandag: 07:00 – 20:00</p></div></div>
+    </div>
+    <div class="map-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2500!2d3.6!3d50.85!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zS2FwZWxsZXN0cmFhdCAxLCBCZWxnaXVt!5e0!3m2!1snl!2sbe!4v1620000000000" allowfullscreen loading="lazy" title="Garage Mo Altunji"></iframe>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">MO <span>AUTO</span></div>
+  <p>© 2025 Mo Altunji Garage. Alle rechten voorbehouden.</p>
+  <div class="footer-links">
+    <a href="#home">Home</a><a href="#about">Over Ons</a><a href="#services">Diensten</a><a href="#afspraak">Afspraak</a><a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<button id="adminBtn" onclick="openAdmin()" title=""></button>
+
+<!-- PASSWORD MODAL -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-modal">
+    <h4>🔒 BEHEER</h4>
+    <p>Voer het wachtwoord in om de weekplanning te beheren.</p>
+    <input type="password" class="pw-input" id="pwInput" placeholder="Wachtwoord" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">Inloggen</button>
+    <div class="pw-error" id="pwError">❌ Fout wachtwoord. Probeer opnieuw.</div>
+    <span class="pw-cancel" onclick="closePw()">Annuleren</span>
+  </div>
+</div>
+
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-modal">
+    <button class="admin-close" onclick="closeAdmin()">✕</button>
+    <h3>MAANDPLANNING</h3>
+    <p>Stel per dag de openingsuren in. Klik op een dag in de kalender om te bewerken.</p>
+    <div class="week-nav">
+      <button onclick="adminPrev()">‹ Vorige</button>
+      <span class="week-label" id="adminWeekLabel"></span>
+      <button onclick="adminNext()">Volgende ›</button>
+    </div>
+    <!-- Mini kalender voor admin -->
+    <div id="adminCalGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:1.2rem"></div>
+    <!-- Dag editor -->
+    <div id="adminDayEditor" style="display:none;background:#1a0030;border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.2rem">
+      <div style="font-weight:700;margin-bottom:1rem;color:var(--purple-light)" id="adminEditLabel"></div>
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <label class="day-toggle" style="display:flex;align-items:center;gap:0.6rem">
+          <input type="checkbox" id="adminDayOpen" onchange="toggleAdminDay()">
+          <span class="toggle-slider"></span>
+          <span style="font-size:0.9rem;color:#c0aad8">Open</span>
+        </label>
+        <div id="adminHourPickers" style="display:flex;gap:0.8rem;align-items:center">
+          <span style="color:var(--gray);font-size:0.85rem">Van</span>
+          <select id="adminStart" style="background:#0a0010;border:1px solid var(--border);color:var(--white);border-radius:6px;padding:0.35rem 0.6rem;font-family:Outfit,sans-serif"></select>
+          <span style="color:var(--gray);font-size:0.85rem">Tot</span>
+          <select id="adminEnd" style="background:#0a0010;border:1px solid var(--border);color:var(--white);border-radius:6px;padding:0.35rem 0.6rem;font-family:Outfit,sans-serif"></select>
+        </div>
+      </div>
+    </div>
+    <!-- Slot duur instelling -->
+    <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.2rem">
+      <div style="font-weight:700;color:var(--purple-light);margin-bottom:0.8rem;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.05em">⏱️ Tijdslot duur</div>
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <span style="color:var(--gray);font-size:0.88rem">Elke afspraak duurt</span>
+        <select id="slotDurSelect" style="background:#1a0030;border:1px solid var(--border);color:var(--white);border-radius:8px;padding:0.4rem 0.8rem;font-family:Outfit,sans-serif;font-size:0.95rem">
+          <option value="30">30 minuten</option>
+          <option value="60">1 uur</option>
+          <option value="90">1,5 uur</option>
+          <option value="120">2 uur</option>
+        </select>
+      </div>
+    </div>
+    <!-- Afspraken beheren -->
+    <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.2rem">
+      <div style="font-weight:700;color:var(--purple-light);margin-bottom:0.8rem;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.05em">📋 Afspraken Beheren</div>
+      <div style="display:flex;gap:0.8rem;align-items:center;margin-bottom:0.8rem;flex-wrap:wrap">
+        <span style="color:var(--gray);font-size:0.88rem">Kies datum:</span>
+        <input type="date" id="adminApptDate" onchange="loadAppointments()" style="background:#1a0030;border:1px solid var(--border);color:var(--white);border-radius:6px;padding:0.35rem 0.6rem;font-family:Outfit,sans-serif">
+      </div>
+      <div id="adminApptList"><p style="color:var(--gray);font-size:0.85rem;font-style:italic">Kies een datum om afspraken te zien.</p></div>
+    </div>
+    <button class="admin-save" onclick="saveAdmin()">💾 Opslaan & Toepassen</button>
+    <div class="admin-saved" id="adminSaved">✅ Opgeslagen! De kalender is bijgewerkt.</div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// EMAILJS CONFIGURATIE
+// Stap 1: Maak account op emailjs.com
+// Stap 2: Voeg Gmail toe als service
+// Stap 3: Maak een template met variabelen:
+//   {{from_name}}, {{from_email}}, {{phone}},
+//   {{car}}, {{service}}, {{date}}, {{timeslot}}, {{message}}
+// Stap 4: Vul hieronder jouw gegevens in:
+const EJ_KEY           = 'gjzeRC0EuimUzT2tH';
+const EJ_SERVICE       = 'service_prxqk52';
+const EJ_TEMPLATE      = 'template_djjshs9';   // Mail naar Mo
+const EJ_TEMPLATE_CONFIRM = 'template_05ep5m8'; // Bevestiging naar klant
+// ═══════════════════════════════════════════
+
+emailjs.init('gjzeRC0EuimUzT2tH');
+
+const MONTHS = ['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'];
+const DAYS_SHORT = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+const DAYS_FULL  = ['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'];
+// Slot duration in minuten — aanpasbaar via beheerpaneel
+let slotDuration = parseInt(localStorage.getItem('garageSlotDuration') || '60');
+
+function generateSlots(startStr, endStr, duration){
+  const slots = [];
+  let [sh, sm] = startStr.split(':').map(Number);
+  const [eh, em] = endStr.split(':').map(Number);
+  const endMins = eh*60 + em;
+  let cur = sh*60 + sm;
+  while(cur + duration <= endMins){
+    const h = String(Math.floor(cur/60)).padStart(2,'0');
+    const m = String(cur%60).padStart(2,'0');
+    slots.push(h+':'+m);
+    cur += duration;
+  }
+  return slots;
+}
+
+let schedule = {};
+try { schedule = JSON.parse(localStorage.getItem('garageSchedule') || '{}'); } catch(e){}
+
+const today = new Date(); today.setHours(0,0,0,0);
+let calY = today.getFullYear(), calM = today.getMonth();
+let selDate = null, selSlot = null;
+
+function dayKey(d) { return d.toISOString().split('T')[0]; }
+function getDayData(d) {
+  const k = dayKey(d);
+  if(k in schedule) return schedule[k];
+  return d.getDay() === 1 ? {open:true, start:'07:00', end:'20:00'} : {open:false, start:'07:00', end:'20:00'};
+}
+function isOpen(d) { return getDayData(d).open; }
+function getDayHours(d) { const data=getDayData(d); return data.open ? data.start+'–'+data.end : 'Gesloten'; }
+
+// ── CALENDAR ──
+function toggleCal() {
+  const p = document.getElementById('calPopup');
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) renderCal();
+}
+function renderCal() {
+  document.getElementById('calMonthLabel').textContent = `${MONTHS[calM]} ${calY}`;
+  const g = document.getElementById('calGrid'); g.innerHTML = '';
+  DAYS_SHORT.forEach(d => { const el=document.createElement('div'); el.className='cal-day-header'; el.textContent=d; g.appendChild(el); });
+  const first = new Date(calY, calM, 1);
+  const offset = (first.getDay()+6)%7;
+  for(let i=0;i<offset;i++){const el=document.createElement('div');el.className='cal-day empty';g.appendChild(el);}
+  const dim = new Date(calY,calM+1,0).getDate();
+  for(let d=1;d<=dim;d++){
+    const date=new Date(calY,calM,d); date.setHours(0,0,0,0);
+    const el=document.createElement('div'); el.className='cal-day'; el.textContent=d;
+    const past = date<today;
+    const open = isOpen(date);
+    if(past) el.classList.add('past');
+    else if(!open) el.classList.add('closed-day');
+    else { el.classList.add('open-day'); el.onclick=()=>pickDate(date); }
+    if(date.getTime()===today.getTime()) el.classList.add('today-marker');
+    if(selDate && date.getTime()===selDate.getTime()) el.classList.add('selected');
+    g.appendChild(el);
+  }
+}
+function prevMonth(e){e.stopPropagation();calM--;if(calM<0){calM=11;calY--;}renderCal();}
+function nextMonth(e){e.stopPropagation();calM++;if(calM>11){calM=0;calY++;}renderCal();}
+
+function pickDate(date){
+  selDate=date; selSlot=null;
+  document.getElementById('calPopup').classList.remove('open');
+  const disp=document.getElementById('dateDisplay');
+  disp.textContent='📅 '+date.toLocaleDateString('nl-BE',{weekday:'long',day:'numeric',month:'long'});
+  disp.classList.add('has-value');
+  renderSlots();
+}
+
+// ── TIMESLOTS ──
+function renderSlots(){
+  const a=document.getElementById('slotArea');
+  if(!selDate){a.innerHTML='<p class="no-date-msg">Kies eerst een datum hierboven.</p>';return;}
+  const booked=getBooked(selDate);
+  const data=getDayData(selDate);
+  const availableSlots=generateSlots(data.start, data.end, slotDuration);
+  if(availableSlots.length===0){ a.innerHTML='<p class="no-date-msg">Geen tijdslots beschikbaar voor deze dag.</p>'; return; }
+  a.innerHTML='<div class="timeslots">'+availableSlots.map(s=>{
+    const taken=booked.includes(s);
+    return `<div class="timeslot ${taken?'unavailable':''}" onclick="pickSlot(this,'${s}')">${s}${taken?' ✗':''}</div>`;
+  }).join('')+'</div>';
+}
+function pickSlot(el,slot){
+  if(el.classList.contains('unavailable'))return;
+  document.querySelectorAll('.timeslot').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected'); selSlot=slot;
+}
+
+// ── BOOKED SLOTS ──
+let bookedSlots = {};
+try { bookedSlots = JSON.parse(localStorage.getItem('garageBookedSlots') || '{}'); } catch(e){}
+function getBooked(date){ return bookedSlots[dayKey(date)] || []; }
+function addBooked(date, slot){
+  const k=dayKey(date);
+  if(!bookedSlots[k]) bookedSlots[k]=[];
+  bookedSlots[k].push(slot);
+  localStorage.setItem('garageBookedSlots', JSON.stringify(bookedSlots));
+}
+
+// ── SUBMIT ──
+async function submitBooking(){
+  const v=id=>document.getElementById(id).value.trim();
+  const fname=v('fname'),lname=v('lname'),email=v('email'),phone=v('phone'),car=v('car'),service=v('service'),desc=v('desc');
+  if(!fname||!lname||!email||!phone||!car||!service||!selDate||!selSlot){
+    alert('Gelieve alle verplichte velden (*) in te vullen en een datum + tijdslot te kiezen.');return;
+  }
+  if(getBooked(selDate).includes(selSlot)){
+    alert('Dit tijdslot is al bezet. Kies een ander tijdslot.');
+    renderSlots(); return;
+  }
+  const dateStr=selDate.toLocaleDateString('nl-BE',{weekday:'long',day:'numeric',month:'long'});
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.textContent='⏳ Verzenden...';
+  try{
+    // Mail naar Mo
+    await emailjs.send(EJ_SERVICE,EJ_TEMPLATE,{
+      from_name:`${fname} ${lname}`,from_email:email,phone,car,service,date:dateStr,timeslot:selSlot,
+      message:desc||'Geen extra beschrijving.',to_email:'ziad.altunji@gmail.com'
+    });
+    // Bevestigingsmail naar klant
+    await emailjs.send(EJ_SERVICE,EJ_TEMPLATE_CONFIRM,{
+      from_name:`${fname} ${lname}`,from_email:email,phone,car,service,date:dateStr,timeslot:selSlot,
+      message:'Uw afspraak bij Garage Mo Altunji is ontvangen. Mo neemt binnenkort contact op ter bevestiging.',
+      to_email:email
+    });
+    addBooked(selDate, selSlot);
+    renderSlots();
+    document.getElementById('successMsg').style.display='block';
+    document.getElementById('errorMsg').style.display='none';
+    btn.textContent='✅ Verzonden!';
+    setTimeout(()=>{document.getElementById('successMsg').style.display='none';btn.disabled=false;btn.textContent='📨 Afspraak Aanvragen';},7000);
+  }catch(err){
+    document.getElementById('errorMsg').style.display='block';
+    btn.disabled=false; btn.textContent='📨 Afspraak Aanvragen';
+  }
+}
+
+// ── HOURS TABLE ──
+function renderHours(){
+  const t=document.getElementById('hoursTable'); t.innerHTML='';
+  for(let i=0;i<14;i++){
+    const d=new Date(today); d.setDate(today.getDate()+i);
+    const open=isOpen(d);
+    const name=DAYS_FULL[d.getDay()];
+    const ds=`${d.getDate()} ${MONTHS[d.getMonth()].substring(0,3)}`;
+    t.innerHTML+=`<tr class="${open?'hours-row-open':''}"><td>${name} <span style="color:var(--gray);font-size:0.78rem">${ds}</span></td><td>${getDayHours(d)}</td></tr>`;
+  }
+}
+
+// ── ADMIN ──
+let adminMonthY=today.getFullYear(), adminMonthM=today.getMonth();
+let adminEditKey=null;
+const START_HOURS=['05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00'];
+const END_HOURS=['13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00'];
+
+function renderAdminCal(){
+  document.getElementById('adminWeekLabel').textContent=MONTHS[adminMonthM]+' '+adminMonthY;
+  const g=document.getElementById('adminCalGrid'); g.innerHTML='';
+  DAYS_SHORT.forEach(d=>{const el=document.createElement('div');el.style.cssText='text-align:center;font-size:0.68rem;color:var(--gray);font-weight:600;padding:0.2rem';el.textContent=d;g.appendChild(el);});
+  const first=new Date(adminMonthY,adminMonthM,1);
+  const offset=(first.getDay()+6)%7;
+  for(let i=0;i<offset;i++){const el=document.createElement('div');g.appendChild(el);}
+  const dim=new Date(adminMonthY,adminMonthM+1,0).getDate();
+  for(let d=1;d<=dim;d++){
+    const date=new Date(adminMonthY,adminMonthM,d); date.setHours(0,0,0,0);
+    const k=dayKey(date);
+    const data=getDayData(date);
+    const past=date<today;
+    const el=document.createElement('div');
+    el.style.cssText='text-align:center;padding:0.4rem 0.2rem;border-radius:8px;font-size:0.82rem;cursor:'+(past?'default':'pointer')+';border:1px solid '+(data.open?'var(--purple)':'var(--border)')+';background:'+(data.open?'var(--purple-glow)':'transparent')+';color:'+(past?'#3a2a50':data.open?'var(--purple-light)':'#c0aad8')+';transition:all 0.15s';
+    el.innerHTML='<div style="font-weight:700">'+d+'</div>'+(data.open?'<div style="font-size:0.6rem;margin-top:1px">'+data.start.substring(0,5)+'</div>':'');
+    if(!past){
+      el.onclick=()=>openDayEditor(date,k);
+      el.onmouseover=()=>{if(k!==adminEditKey)el.style.borderColor='var(--purple-light)';};
+      el.onmouseout=()=>{el.style.borderColor=data.open?'var(--purple)':'var(--border)';};
+    }
+    if(k===adminEditKey) el.style.outline='2px solid var(--purple-light)';
+    g.appendChild(el);
+  }
+}
+
+function openDayEditor(date,k){
+  adminEditKey=k;
+  const data=getDayData(date);
+  document.getElementById('adminDayEditor').style.display='block';
+  document.getElementById('adminEditLabel').textContent=DAYS_FULL[date.getDay()]+' '+date.getDate()+' '+MONTHS[date.getMonth()];
+  document.getElementById('adminDayOpen').checked=data.open;
+  // Fill hour selects
+  const startSel=document.getElementById('adminStart');
+  const endSel=document.getElementById('adminEnd');
+  startSel.innerHTML=START_HOURS.map(h=>`<option ${data.start===h?'selected':''}>${h}</option>`).join('');
+  endSel.innerHTML=END_HOURS.map(h=>`<option ${data.end===h?'selected':''}>${h}</option>`).join('');
+  document.getElementById('adminHourPickers').style.opacity=data.open?'1':'0.3';
+  document.getElementById('adminHourPickers').style.pointerEvents=data.open?'auto':'none';
+  renderAdminCal();
+}
+
+function toggleAdminDay(){
+  const open=document.getElementById('adminDayOpen').checked;
+  document.getElementById('adminHourPickers').style.opacity=open?'1':'0.3';
+  document.getElementById('adminHourPickers').style.pointerEvents=open?'auto':'none';
+}
+
+function renderAdmin(){ renderAdminCal(); }
+
+function saveAdmin(){
+  if(adminEditKey){
+    const open=document.getElementById('adminDayOpen').checked;
+    const start=document.getElementById('adminStart').value;
+    const end=document.getElementById('adminEnd').value;
+    schedule[adminEditKey]={open,start,end};
+    adminEditKey=null;
+    document.getElementById('adminDayEditor').style.display='none';
+  }
+  // Save slot duration
+  const durSel=document.getElementById('slotDurSelect');
+  if(durSel){ slotDuration=parseInt(durSel.value); localStorage.setItem('garageSlotDuration',slotDuration); }
+  localStorage.setItem('garageSchedule',JSON.stringify(schedule));
+  renderHours(); renderCal(); renderAdminCal();
+  const s=document.getElementById('adminSaved');
+  s.style.display='block'; setTimeout(()=>s.style.display='none',3000);
+}
+function adminPrev(){adminMonthM--;if(adminMonthM<0){adminMonthM=11;adminMonthY--;}renderAdminCal();}
+function adminNext(){adminMonthM++;if(adminMonthM>11){adminMonthM=0;adminMonthY++;}renderAdminCal();}
+function openAdmin(){
+  document.getElementById('pwInput').value='';
+  document.getElementById('pwError').style.display='none';
+  document.getElementById('pwOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('pwInput').focus(),100);
+}
+function checkPw(){
+  const pw=document.getElementById('pwInput').value;
+  if(pw==='Lokeren1'){
+    document.getElementById('pwOverlay').classList.remove('open');
+    document.getElementById('adminOverlay').classList.add('open');
+    adminMonthY=today.getFullYear(); adminMonthM=today.getMonth();
+    adminEditKey=null;
+    document.getElementById('adminDayEditor').style.display='none';
+    // Set correct slot duration value
+    const durSel=document.getElementById('slotDurSelect');
+    if(durSel) durSel.value=slotDuration;
+    renderAdminCal();
+  } else {
+    document.getElementById('pwError').style.display='block';
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').focus();
+  }
+}
+function closePw(){
+  document.getElementById('pwOverlay').classList.remove('open');
+}
+function loadAppointments(){
+  const dateVal = document.getElementById('adminApptDate').value;
+  const list = document.getElementById('adminApptList');
+  if(!dateVal){ list.innerHTML='<p style="color:var(--gray);font-size:0.85rem;font-style:italic">Kies een datum.</p>'; return; }
+  const parts = dateVal.split('-');
+  const date = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  const k = dayKey(date);
+  const booked = bookedSlots[k] || [];
+  if(booked.length === 0){
+    list.innerHTML='<p style="color:#5ddd90;font-size:0.85rem">✅ Geen afspraken op deze dag.</p>';
+    return;
+  }
+  const dateStr = date.toLocaleDateString('nl-BE',{weekday:'long',day:'numeric',month:'long'});
+  list.innerHTML = booked.map(slot => `
+    <div style="display:flex;align-items:center;justify-content:space-between;background:#0a0010;border:1px solid var(--border);border-radius:8px;padding:0.6rem 1rem;margin-bottom:0.5rem">
+      <span style="font-weight:600;color:var(--white)">🕐 ${slot}</span>
+      <button onclick="cancelSlot('${k}','${slot}')" style="background:#3a0010;border:1px solid #602020;color:#ff6b6b;border-radius:6px;padding:0.3rem 0.8rem;cursor:pointer;font-family:Outfit,sans-serif;font-size:0.82rem;transition:background 0.2s" onmouseover="this.style.background='#600020'" onmouseout="this.style.background='#3a0010'">
+        ✕ Annuleren
+      </button>
+    </div>
+  `).join('') + `<p style="color:var(--gray);font-size:0.78rem;margin-top:0.5rem">${booked.length} afspraak(en) op ${dateStr}</p>`;
+}
+
+function cancelSlot(dateKey, slot){
+  if(!confirm('Afspraak van ' + slot + ' annuleren? Het slot wordt weer beschikbaar.')) return;
+  if(bookedSlots[dateKey]){
+    bookedSlots[dateKey] = bookedSlots[dateKey].filter(s => s !== slot);
+    if(bookedSlots[dateKey].length === 0) delete bookedSlots[dateKey];
+    localStorage.setItem('garageBookedSlots', JSON.stringify(bookedSlots));
+  }
+  loadAppointments();
+  renderSlots();
+}
+
+function closeAdmin(){document.getElementById('adminOverlay').classList.remove('open');}
+document.getElementById('adminOverlay').addEventListener('click',function(e){if(e.target===this)closeAdmin();});
+
+// ── NAV ──
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');}
+
+// ── INIT ──
+renderHours();
+renderCal();
+</script>
+</body>
+</html>
